@@ -16,17 +16,32 @@ What is the dataset you’ll be working with? Please include background on who c
 Who is your target audience? Depending on the domain of your data, there may be a variety of audiences interested in using the dataset. You should home in on one of these audiences.
 - The target audience is people who are interested in the role of police in communities, police reform/abolition, the effectiveness of the use of force policy, the presence of policing of certain marginalized communities, and more. 
 What does your audience want to learn from your data? Please list out at least 3 specific questions that your project will answer for your audience.
+<<<<<<< HEAD
 - Is there a racialized pattern for police's use of force?
 - What precinct contains the highest proportion of BIPOC communities and how is it policed in comparison to non-BIPOC precincts?
 - Is there a correlation between gender and the use of force?
+=======
+
+>>>>>>> 6bc5430890231ec44c61eed7ed2266465a146cb0
 Technical Description
 This section of your proposal asks you to think through the specific analytical steps you’ll need to complete throughout the project.
 
 How will you be reading in your data (i.e., are you using an API, or is it a static .csv/.json file)?
+- we'll use a static .csv file 
+
 What types of data-wrangling (reshaping, reformatting, etc.) will you need to do to your data?
+- the .csv format will be basically ready to use in rstudio, but: 
+- we can order the data by incident level (level 1, 2, 3) to create a ranking 
+- will have to edit date/time into new columns (create column for date and time separately)
+
 What (major/new) libraries will be using in this project (no need to list common libraries that are used in many projects such as dplyr)
 What questions, if any, will you be answering with statistical analysis/machine learning?
+- We will use the tidyverse package, in order to utilize readr, stringr, magrittr, and ggplot2
+
 What major challenges do you anticipate?
+- A challenge will be deciding what to plot, and how to best visualise the data for the audience 
+- Additionally, figuring out how to create a map of the data in rstudio 
+
 Project Set-up
 In addition to outlining the steps you’ll be taking to complete the project, you’ll also be setting up your project on GitHub by doing the following:
 
