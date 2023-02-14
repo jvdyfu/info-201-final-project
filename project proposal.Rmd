@@ -12,6 +12,7 @@ Data and Audience
 Depending on the specifics of your project, you should outline the answers to these (and perhaps other) questions:
 
 What is the dataset you’ll be working with? Please include background on who collected the data, where you accessed it, and any additional information we should know about how this data came to be.
+- link to dataset: https://data.seattle.gov/Public-Safety/Use-Of-Force/ppi5-g2bj
 - the data set we will be working with is the "Use of Force" in he seattle police department. This data is a compilation of date and time, incident number, incident type, precinct, sector, and beat (type of beating), officer ID, subject ID, subject race, and subject gender. The data was provided by the City of Seattle by a dataset owner named 6506 Tony Baden. The data was collected in 2017 but has been updated as of late on February 14, 2023. 
 Who is your target audience? Depending on the domain of your data, there may be a variety of audiences interested in using the dataset. You should home in on one of these audiences.
 - The target audience is people who are interested in the role of police in communities, police reform/abolition, the effectiveness of the use of force policy, the presence of policing of certain marginalized communities, and more. 
@@ -22,7 +23,7 @@ What does your audience want to learn from your data? Please list out at least 3
 - Is there a correlation between gender and the use of force?
 =======
 
->>>>>>> 6bc5430890231ec44c61eed7ed2266465a146cb0
+
 Technical Description
 This section of your proposal asks you to think through the specific analytical steps you’ll need to complete throughout the project.
 
