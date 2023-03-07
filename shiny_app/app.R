@@ -12,42 +12,61 @@ library(tidyverse)
 
 force <- read_delim("Use_Of_Force.csv")
 
-# Define UI for application that draws a histogram
+# I added my introduction slide to this document
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
+                titlePanel("Seattle Use Of Force Policing"),
+                tabsetPanel(
+                  tabPanel("Introduction",
+                           mainPanel(
+                             h3("There are", nrow(force), "documented Use Of Force incidents in the City of Seattle"),
+                             HTML("<br>"),
+                             h5("The dataset reports incidents under eight different racial categories:", textOutput("race")),
+                             HTML("<br>"),
+                             h5("The dataset also breaks down the victims upon gender categories:", textOutput("gender")),
+                             HTML("<br>"),
+                             h5("The dataset operates under these Precincts/Areas:", textOutput("area")),
+                             img(src = "seattleprecinct.jpeg", height = 400, width = 300)
+                           )
+                  ),
+                  tabPanel("Comparison",
+                           sidebarLayout(
+                             sidebarPanel(
+                               checkboxGroupInput(
+                                 "races",
+                                 "Input graph title?",
+                                 #this is just from my PS
+                                 choices = unique(force$Subject_Race))
+                             ),
+                             mainPanel = plotOutput("racexuof")
+                           )
+                  ),
+                  tabPanel("Table")
+                )
 )
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
+  
+  output$race <- renderText({
+    race_list <- unique(force$Subject_Race)
+    paste(race_list, collapse = ", ")
+  })
+  
+  output$gender <- renderText({
+    gender_list <- unique(force$Subject_Gender)
+    paste(gender_list, collapse = ", ")
+  })
+  
+  output$area <- renderText({
+    precinct_list <- unique(force$Precinct)
+    paste(precinct_list, collapse = ", ")
+  })
+  
+  output$racexuof <- renderPlot({
+    #this is just a random plot for now
+    x <- 5
+    y <- 5
+    plot(x,y)
+  })
 }
 
 # Run the application 
