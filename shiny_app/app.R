@@ -28,16 +28,17 @@ ui <- fluidPage(
                              img(src = "seattleprecinct.jpeg", height = 400, width = 300)
                            )
                   ),
-                  tabPanel("Comparison",
+                  tabPanel("Gender Bar Plot",
                            sidebarLayout(
                              sidebarPanel(
-                               checkboxGroupInput(
-                                 "races",
-                                 "Input graph title?",
-                                 #this is just from my PS
-                                 choices = unique(force$Subject_Race))
-                             ),
-                             mainPanel = plotOutput("racexuof")
+                               selectInput("genderInput", "Choose Genders to Display:",
+                                           choices = c("Male", "Female", "Unknown"),
+                                           selected = "Male",
+                                           multiple = TRUE),
+                               selectInput("colorInput", "Choose Bar Color:",
+                                           choices = c("Blue", "Red", "Green"),
+                                           selected = "Blue")),
+                             mainPanel(plotOutput("precinct")),
                            )
                   ),
                   tabPanel("Table")
@@ -67,6 +68,33 @@ server <- function(input, output) {
     y <- 5
     plot(x,y)
   })
+  
+  
+  ## this is for Vivian's tab
+  filteredDataOne <- reactive({
+    force %>%
+      filter(Subject_Gender %in% input$genderInput)
+  })
+  barColor <- reactive({
+    switch(input$colorInput,
+           "Blue" = "cornflowerblue",
+           "Red" = "red3",
+           "Green" = "forestgreen")
+  })
+  output$precinct <- renderPlot({ ##for vivian's plot
+    ggplot(filteredDataOne(), aes(x = Subject_Gender)) +
+      geom_bar(fill = barColor()) +
+      labs(x = "Gender", y = "Count", title = "Gender Distribution") +
+      theme_minimal()
+  })
+  summaryText <- reactive({ ## also for Vivian's tab
+    data <- filteredDataOne()
+    n_incidents <- nrow(data)
+    n_males <- sum(force$Subject_Gender == "Male")
+    n_females <- sum(force$Subject_Gender == "Female")
+    n_unknown <- sum(force$Subject_Gender == "Unknown")
+
+  }) 
 }
 
 # Run the application 
