@@ -9,6 +9,8 @@
 
 library(shiny)
 
+force <- read_delim("Use_Of_Force.csv")
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
