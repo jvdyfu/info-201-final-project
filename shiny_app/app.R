@@ -87,14 +87,6 @@ server <- function(input, output) {
       labs(x = "Gender", y = "Count", title = "Gender Distribution") +
       theme_minimal()
   })
-  summaryText <- reactive({ ## also for Vivian's tab
-    data <- filteredDataOne()
-    n_incidents <- nrow(data)
-    n_males <- sum(force$Subject_Gender == "Male")
-    n_females <- sum(force$Subject_Gender == "Female")
-    n_unknown <- sum(force$Subject_Gender == "Unknown")
-
-  }) 
 }
 
 # Run the application 
