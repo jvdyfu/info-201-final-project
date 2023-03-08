@@ -111,8 +111,49 @@ ui <- fluidPage(
                   
                   tabPanel("Conclusion Takeaways",
                            fluidRow(column(8, 
-                            h4(),
-                            h4()
+                            h3("Description of Notable Insights or Patterns"),
+                            h4("In terms of gender identity, a notable insight is that the most predominant
+                               gender of the victims are male while the lowest identity were non-binaries
+                               and transgender. There is surprisingly more cases where the victims are transgender
+                               females than transgender males."),
+                            DT::dataTableOutput("genderTable"),
+                            h4("In terms of race, a notable insight is that white people remain the predominant
+                               race of victims across all levels of the use of force. Black people follow closely
+                               in second though where as every other race have way less victims in comparision
+                               to the top two."),
+                            DT::dataTableOutput("raceTable"),
+                            h4("In terms of locations, the highest amount of cases with level 1 use of force
+                               resides in West King. The highest amount of cases with level 2
+                               resides in East Edward. The amount of cases for level 3 are all relatively the same.
+                               Lastly, the highest amount of cases for level 3 OIS resides in North Union."),
+                            DT::dataTableOutput("locationTable"),
+                            h3("The Broader Implications of Insight"),
+                            h4("In terms of gender, it seems that males are the majority of the victims,
+                               which suggests that police does not target women and other identities.
+                               Within races, although the race is predominantly white, we have to take 
+                               in account that the largest race group is still white people. Since the number of 
+                               cases where the victims are black are follow closely as the second most group,
+                               this suggests that signs of police brutality reside in targetting black communities. 
+                               For the locations, it seems that West King, East Edward, and North Union has the highest
+                               amount of cases for each type of use of force except for level 3. These locations
+                               have some of the highest populations of marginalized communities living in them, suggesting
+                               that there is evidence of police brutality targeting marginalized communities."),
+                            h3("Data Quality"),
+                            h4("We found our dataset to be of reasonable quality due to it being a reliable source
+                               and clear naming conventions. We do think that it could give biased results. For example,
+                               although white people were the race that were the most predominant in victims, this 
+                               can be manipulated to ignore the evident targetting of marginalized communities
+                               if we didn't take in consideration that there is a higher population of white people
+                               than any other race. This could potentially harm people of color as it dismisses the 
+                               problem that people of color are often victims of force by the police due to racism."),
+                            h3("Future Ideas"),
+                            h4("Some ideas on how to advance the project include being able to compare the number of
+                               victims by race to the population of that race within Seattle to better answer our 
+                               main question. We could also create a tab panel to be able to view cases by time to 
+                               see whether or not the time of day a case occurs is correlated with gender or race of 
+                               the victim. This could answer questions such as: Are people of color more likely to be
+                               victims of police force at night compared to the morning? What about in comparision
+                               to white people?"),
                             )),
                            
                            )
@@ -205,6 +246,31 @@ server <- function(input, output) {
       geom_bar(fill = barColor()) +
       labs(x = "Gender", y = "Count", title = "Gender Distribution") +
       theme_minimal()
+  })
+  
+  genderCount <- useOfForceData %>% 
+    group_by(Subject_Gender) %>% 
+    summarize(count = n())
+  
+  output$genderTable = DT::renderDataTable({
+    genderCount
+  })
+  
+  raceCount <- useOfForceData %>% 
+    group_by(Subject_Race, Incident_Type) %>% 
+    summarize(count = n())
+  
+  output$raceTable = DT::renderDataTable({
+    raceCount
+  })
+  
+  locationCount <- useOfForceData %>% 
+    filter(!is.na(Precinct), !is.na(Sector)) %>% 
+    group_by(Precinct, Sector, Incident_Type) %>% 
+    summarize(count = n()) 
+  
+  output$locationTable = DT::renderDataTable({
+    locationCount
   })
   
 }
