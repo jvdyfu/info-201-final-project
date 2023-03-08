@@ -10,6 +10,7 @@
 library(shiny)
 library(tidyverse)
 
+
 force <- read_delim("Use_Of_Force.csv")
 
 useofforce <- force %>% 
@@ -22,7 +23,7 @@ useofforce <- force %>%
 ui <- fluidPage(
                 titlePanel("Seattle Police Department: Use Of Force Policy"),
                 tabsetPanel(
-                  tabPanel("Introduction to Title 8",
+                  tabPanel("Introduction",
                            mainPanel(fluidRow(
                              column(8,
                             h2("Purpose:"),
@@ -49,10 +50,15 @@ ui <- fluidPage(
                            )
                   )),
                   tabPanel("Gender Bar Plot",
+                           fluidRow(column(8, h4("This gender bar plot attempts to answer the 
+                                                 question of whether or not there is a correlation
+                                                 between gender identity and the number of police cases
+                                                 where force was used. "))),
                            sidebarLayout(
                              sidebarPanel(
                                selectInput("genderInput", "Choose Genders to Display:",
-                                           choices = c("Male", "Female", "Unknown"),
+                                           choices = c("Male", "Female", "Unknown", "Non-binary",
+                                                       "Other", "Transgender Male", "Transgender Female"),
                                            selected = "Male",
                                            multiple = TRUE),
                                selectInput("colorInput", "Choose Bar Color:",
@@ -61,17 +67,56 @@ ui <- fluidPage(
                              mainPanel(plotOutput("precinct")),
                            )
                   ),
+                  
                   tabPanel("Race Bar Plot",
+                           fluidRow(column(8, h4("This race bar plot attempts to answer the 
+                                                 question of whether or not there is a correlation
+                                                 between race and the number of police cases
+                                                 where force was used. We also answer the
+                                                 question of if there's a correlation with the
+                                                 level of force used (incident type)."))),
                            sidebarLayout(
                              sidebarPanel(
                                checkboxGroupInput(
                                  "uof",
-                                 "Which Use of Force would you like to see?",
+                                 "Which level of the use of force would you like to see?",
                                  choices = useofforce,
                                  selected = "Level 1 - Use of Force")
                              ),
                              mainPanel = plotOutput("racexuof")
-                           ))
+                           )
+                  ),
+            
+                  tabPanel("Location Scatter Plot",
+                           fluidRow(column(8, h4("This location scatter plot attempts to answer the 
+                                                 question of whether or not there is a correlation
+                                                 between the location (precinct and sector) of the police 
+                                                 cases where force was used has a correlation with the
+                                                 number of cases. We also can answer the question
+                                                 of if there's a correlation with the level of 
+                                                 force used (incident type)."))),
+                           sidebarLayout(
+                             sidebarPanel(
+                               checkboxGroupInput(
+                                 "loc",
+                                 "Which level of the use of force would you like to see?",
+                                 choices = useofforce,
+                                 selected = "Level 1 - Use of Force")
+                             ),
+                             
+                             mainPanel = plotOutput("locationxuof")
+                    
+                           )
+                  ),
+                  
+                  tabPanel("Conclusion Takeaways",
+                           fluidRow(column(8, 
+                            h4(),
+                            h4()
+                            )),
+                           
+                           )
+                  
                 )
   )
 
@@ -109,8 +154,37 @@ server <- function(input, output) {
         geom_bar(stat = "identity", position = "dodge") +
         labs(title = "Race and Use of Force",
              x = "Race",
-             y = "Count")
+             y = "Number of Cases where Force was Used ",
+             fill = "Incident Type"
+             )
     })
+
+  })
+  
+  output$locationxuof <- renderPlot({
+    
+    
+    subset <- reactive({ #filter to react with input
+      force %>% 
+        filter(Incident_Type %in% input$loc)
+    })
+    
+    output$locationxuof <- renderPlot({ #plot
+      subset() %>% 
+        filter(!is.na(Precinct), !is.na(Sector)) %>% 
+        group_by(Precinct, Sector, Incident_Type) %>% 
+        summarize(count = n()) %>% 
+        mutate(loc = paste(Precinct, " ", Sector, sep="")) %>% 
+        ggplot(aes(x = loc, y = count, fill = Incident_Type, col = Incident_Type, size = count)) +
+        geom_point(stat = "identity", position = "dodge") +
+        labs(title = "Location and Use of Force",
+             x = "Location",
+             y = "Number of Cases where Force was Used",
+             fill = "Incident Type",
+             col = "Incident Type",
+             size = "Number of Cases where Force was Used")
+    })
+    
   })
   
   
@@ -119,6 +193,7 @@ server <- function(input, output) {
     force %>%
       filter(Subject_Gender %in% input$genderInput)
   })
+  
   barColor <- reactive({
     switch(input$colorInput,
            "Blue" = "cornflowerblue",
@@ -131,6 +206,7 @@ server <- function(input, output) {
       labs(x = "Gender", y = "Count", title = "Gender Distribution") +
       theme_minimal()
   })
+  
 }
 
 # Run the application 
