@@ -12,6 +12,12 @@ library(tidyverse)
 
 force <- read_delim("Use_Of_Force.csv")
 
+useofforce <- force %>% 
+  select(-ID, -Incident_Num, -Occured_date_time, -Precinct, -Sector, -Beat,
+         -Officer_ID, -Subject_ID, -Subject_Race, -Subject_Gender) %>%
+  unlist() %>%
+  setdiff(force)
+
 # I added my introduction slide to this document
 ui <- fluidPage(
                 titlePanel("Seattle Police Department: Use Of Force Policy"),
@@ -55,7 +61,17 @@ ui <- fluidPage(
                              mainPanel(plotOutput("precinct")),
                            )
                   ),
-                  tabPanel("Table")
+                  tabPanel("Race Bar Plot",
+                           sidebarLayout(
+                             sidebarPanel(
+                               checkboxGroupInput(
+                                 "uof",
+                                 "Which Use of Force would you like to see?",
+                                 choices = useofforce,
+                                 selected = "Level 1 - Use of Force")
+                             ),
+                             mainPanel = plotOutput("racexuof")
+                           ))
                 )
   )
 
@@ -77,11 +93,24 @@ server <- function(input, output) {
     paste(precinct_list, collapse = ", ")
   })
   
-  output$racexuof <- renderPlot({
-    #this is just a random plot for now
-    x <- 5
-    y <- 5
-    plot(x,y)
+  output$racexuof <- renderPlot({ #daniel's race x use of force plot
+    
+    
+    subset <- reactive({ #filter to react with input
+      force %>% 
+        filter(Incident_Type %in% input$uof)
+    })
+    
+    output$racexuof <- renderPlot({ #plot
+      subset() %>% 
+        group_by(Subject_Race, Incident_Type) %>%
+        summarize(count = n()) %>%
+        ggplot(aes(x = Subject_Race, y = count, fill = Incident_Type)) +
+        geom_bar(stat = "identity", position = "dodge") +
+        labs(title = "Race and Use of Force",
+             x = "Race",
+             y = "Count")
+    })
   })
   
   
