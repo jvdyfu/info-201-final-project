@@ -9,6 +9,8 @@
 
 library(shiny)
 library(tidyverse)
+library(DT)
+datatable(iris)
 
 
 force <- read_delim("Use_Of_Force.csv")
@@ -248,7 +250,7 @@ server <- function(input, output) {
       theme_minimal()
   })
   
-  genderCount <- useOfForceData %>% 
+  genderCount <- force %>% 
     group_by(Subject_Gender) %>% 
     summarize(count = n())
   
@@ -256,7 +258,7 @@ server <- function(input, output) {
     genderCount
   })
   
-  raceCount <- useOfForceData %>% 
+  raceCount <- force %>% 
     group_by(Subject_Race, Incident_Type) %>% 
     summarize(count = n())
   
@@ -264,7 +266,7 @@ server <- function(input, output) {
     raceCount
   })
   
-  locationCount <- useOfForceData %>% 
+  locationCount <- force %>% 
     filter(!is.na(Precinct), !is.na(Sector)) %>% 
     group_by(Precinct, Sector, Incident_Type) %>% 
     summarize(count = n()) 
