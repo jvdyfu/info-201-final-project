@@ -92,7 +92,7 @@ server <- function(input, output) {
     precinct_list <- unique(force$Precinct)
     paste(precinct_list, collapse = ", ")
   })
-  
+   
   output$racexuof <- renderPlot({ #daniel's race x use of force plot
     
     
