@@ -1,0 +1,13 @@
+name: shiny_app
+title: shiny_app
+username:
+account: danielkim
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8538694
+bundleId: 6943802
+url: https://danielkim.shinyapps.io/shiny_app/
+when: 1678491684.40173
+lastSyncTime: 1678491684.40177
+asMultiple: FALSE
+asStatic: FALSE

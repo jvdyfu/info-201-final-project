@@ -131,11 +131,15 @@ ui <- fluidPage(
                             DT::dataTableOutput("locationTable"),
                             h3("The Broader Implications of Insight"),
                             h4("In terms of gender, it seems that males are the majority of the victims,
-                               which suggests that police does not target women and other identities.
+                               which suggests that police does not target women and other identities. However,
+                               it might suggest that people who do not identify as male or female, which is
+                               considered the norm in most of society, might be a target since their 
+                               population group is so low as well. 
                                Within races, although the race is predominantly white, we have to take 
                                in account that the largest race group is still white people. Since the number of 
                                cases where the victims are black are follow closely as the second most group,
-                               this suggests that signs of police brutality reside in targetting black communities. 
+                               this suggests that signs of police brutality reside in targetting black communities
+                               and maybe even other minority groups as well in terms of race. 
                                For the locations, it seems that West King, East Edward, and North Union has the highest
                                amount of cases for each type of use of force except for level 3. These locations
                                have some of the highest populations of marginalized communities living in them, suggesting
